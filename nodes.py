@@ -89,6 +89,25 @@ class Checker(Node):
         return mix(color_1, color_2, alpha)
 
 
+class Color2Int(Node):
+    def _init(self):
+        self.add_port('color', 'color', (1.0, 1.0, 1.0, 1.0))
+        self.add_port('channel', 'int', 0)
+        self.add_port('min', 'int', 0)
+        self.add_port('max', 'int', 10)
+
+    def get(self, s, t):
+        color = self.get_port('color').get(s, t)
+        channel = self.get_port('channel').get(s, t)
+        min = self.get_port('min').get(s, t)
+        max = self.get_port('max').get(s, t)
+
+        if max < min:
+            max, min = min, max
+
+        return int((color[channel] * (max - min)) + min)
+
+
 class Flat(Node):
     def _init(self):
         self.add_port('color', 'color', (1.0, 1.0, 1.0, 1.0))
