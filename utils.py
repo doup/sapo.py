@@ -1,3 +1,11 @@
+# Probably needs a fix
+def blend(cbot, ctop):
+    return (lerp(cbot[0], ctop[0], ctop[3]),
+            lerp(cbot[1], ctop[1], ctop[3]),
+            lerp(cbot[2], ctop[2], ctop[3]),
+            lerp(cbot[3], ctop[3], ctop[3]))
+
+
 def clamp(x, min=0.0, max=1.0):
     if x < min:
         x = min
@@ -12,7 +20,7 @@ def even(x):
 
 
 def lerp(a, b, x):
-    return a * x + (b * (1 - x))
+    return (a * (1 - x)) + (b * x)
 
 
 def mix(ca, cb, x):
@@ -26,6 +34,7 @@ def odd(x):
     return not even(x)
 
 
+# Probably needs a fix
 def smoothstep(a, b, x):
     x = clamp((x - a) / (b - a))
     return x * x * (3 - 2 * x)

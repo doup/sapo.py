@@ -16,7 +16,7 @@ class Renderer:
                 s = x / self.width
                 t = y / self.height
 
-                pixels[x, y] = tuple(int(x * 255) for x in node.get(s, t))
+                pixels[x, y] = tuple(int(x * 255) for x in node.compute(s, t))
 
             if x % 32 == 0:
                 sys.stdout.write((str(int((x / im.size[0]) * 100)) + '%\r').rjust(10))
