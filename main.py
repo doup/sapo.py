@@ -1,8 +1,9 @@
-from renderer import Renderer
-from nodes import (Checker, Color2Int, Color2Float, Flat, Gradient, Offset,
-                   Scales, WaveDistort)
+from PIL import Image
+from sapo.renderer import PillowRender
+from sapo.nodes import (Checker, Color2Int, Color2Float, Flat, Gradient,
+                        Offset, Scales, WaveDistort)
 
-canvas = Renderer(300, 300)
+canvas = PillowRender(Image.new('RGBA', (300, 300)))
 """
 # Create some nodes
 checker = Checker(x_repeat=8, y_repeat=8, fuzz=0.1)
@@ -58,8 +59,7 @@ checker.get_port('fuzz').connect(fuzzC2F)
 
 canvas.render(checker)
 """
-"""
+
 # 3) Scales
-scales = Scales()
+scales = Scales(x_repeat=4, y_repeat=6)
 canvas.render(scales)
-"""

@@ -1,4 +1,4 @@
-from utils import blend, clamp, even, mix, odd, smoothstep, wrap
+from sapo.utils import blend, clamp, even, mix, odd, smoothstep, wrap
 import math
 
 
