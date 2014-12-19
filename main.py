@@ -1,7 +1,7 @@
 from PIL import Image
 from sapo.renderer import PillowRender
-from sapo.nodes import (Checker, Color2Int, Color2Float, Flat, Gradient,
-                        Offset, Scales, WaveDistort)
+from sapo.nodes import (Checker, Circle, Color2Int, Color2Float, Flat, Gradient,
+                        Multiply, Offset, Scales, WaveDistort)
 
 canvas = PillowRender(Image.new('RGBA', (300, 300)))
 """
@@ -59,7 +59,19 @@ checker.get_port('fuzz').connect(fuzzC2F)
 
 canvas.render(checker)
 """
-
+"""
 # 3) Scales
 scales = Scales(x_repeat=4, y_repeat=6)
 canvas.render(scales)
+"""
+"""
+# 4) Circle with variable radius
+checker = Checker(x_repeat=4, y_repeat=4, fuzz=0.3)
+radius = Color2Float(min=0.01, max=0.5)
+circle = Circle(fuzz=0.025)
+
+radius.get_port('color').connect(checker)
+circle.get_port('radius').connect(radius)
+
+canvas.render(checker)
+"""

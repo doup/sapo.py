@@ -1,3 +1,5 @@
+import math
+
 # Probably needs a fix
 def blend(cbot, ctop):
     return (lerp(cbot[0], ctop[0], ctop[3]),
@@ -13,6 +15,10 @@ def clamp(x, min=0.0, max=1.0):
         x = max
 
     return x
+
+
+def distance(p1, p2):
+    return math.hypot(p1[0] - p2[0], p1[1] - p2[1])
 
 
 def even(x):

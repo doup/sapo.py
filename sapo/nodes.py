@@ -1,4 +1,4 @@
-from sapo.utils import blend, clamp, even, mix, odd, smoothstep, wrap
+from sapo.utils import blend, clamp, distance, even, mix, odd, smoothstep, wrap
 import math
 
 
@@ -151,6 +151,32 @@ class Checker(Node):
                 return self.get_port('color_1').get(s, t)
 
 
+class Circle(Node):
+    def define(self):
+        self.type = 'color'
+        self.add_port('bg', 'color', (0.447, 0.816, 0.973, 1.0))
+        self.add_port('color', 'color', (0.89, 0.0, 0.263, 1.0))
+        self.add_port('radius', 'float', 0.2)
+        self.add_port('pos', 'point', (0.5, 0.5))
+        self.add_port('fuzz', 'float', 0.01)
+
+    def get(self, s, t):
+        bg = self.get_port('bg').get(s, t)
+        color = self.get_port('color').get(s, t)
+        radius = self.get_port('radius').get(s, t)
+        pos = self.get_port('pos').get(s, t)
+        fuzz = self.get_port('fuzz').get(s, t)
+
+        dist = distance((s, t), pos)
+
+        if dist < radius:
+            return color
+        elif dist >= radius and dist < radius + fuzz:
+            return mix(color, bg, smoothstep(0.0, 1.0, (dist - radius) / fuzz))
+        else:
+            return bg
+
+
 class Color2Int(Node):
     def define(self):
         self.type = 'int'
@@ -203,12 +229,28 @@ class Flat(Node):
 class Gradient(Node):
     def define(self):
         self.type = 'color'
+        self.add_port('color_1', 'color', (0.0, 0.0, 0.0, 1.0))
+        self.add_port('color_2', 'color', (1.0, 1.0, 1.0, 1.0))
+        self.add_port('start', 'point', (0.0, 0.5))
+        self.add_port('end', 'point', (1.0, 0.5))
 
     def get(self, s, t):
-        return (smoothstep(0.0, 1.0, s),
-                smoothstep(0.0, 1.0, t),
-                smoothstep(0.0, 1.0, smoothstep(0.0, 1.0, s)),
-                1.0)
+        return mix(
+            self.get_port('color_1').get(s, t),
+            self.get_port('color_2').get(s, t),
+            s
+        )
+
+
+
+class Multiply(Node):
+    def define(self):
+        self.type = 'float'
+        self.add_port('a', 'float', 0.5)
+        self.add_port('b', 'float', 0.5)
+
+    def get(self, s, t):
+        return self.get_port('a').get(s, t) * self.get_port('b').get(s, t)
 
 
 class Offset(Node):
