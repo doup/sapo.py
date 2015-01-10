@@ -73,5 +73,5 @@ circle = Circle(fuzz=0.025)
 radius.get_port('color').connect(checker)
 circle.get_port('radius').connect(radius)
 
-canvas.render(checker)
+canvas.render(circle)
 """

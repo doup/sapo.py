@@ -241,6 +241,104 @@ class Gradient(Node):
             s
         )
 
+"""
+Gradient._compute = function( s, t )
+{
+    var start        = this.getPort('start').getValue( s, t ),
+        end          = this.getPort('end').getValue( s, t ),
+        distance     = {},
+        intersection = {},
+        tmp          = {},
+        reverse      = false,
+        axis, component, pos, endTo, startTo;
+
+    endTo   = SAPO.type.Point.rotate( start, end, 90 );
+    startTo = SAPO.type.Point.rotate( end, start, 90 );
+
+    if( this._feedback )
+    {
+        if( SAPO.helper.drawPoint( start, s, t ) ) return {r:1,g:0,b:0,a:1};
+        if( SAPO.helper.drawText( 'start', start, s, t ) ) return {r:1,g:0,b:0,a:1};
+        if( SAPO.helper.drawPoint( end, s, t ) ) return {r:0,g:1,b:0,a:1};
+        if( SAPO.helper.drawText( 'end', end, s, t ) ) return {r:0,g:1,b:0,a:1};
+        if( SAPO.helper.drawLine( [start,startTo], s, t ) ) return {r:1,g:0.75,b:0.75,a:1};
+        if( SAPO.helper.drawLine( [end,endTo], s, t ) ) return {r:0.75,g:1,b:0.75,a:1};
+    }
+
+    axis = [{x:s,y:0},{x:s,y:1}];
+    component = 'y';
+    pos = t;
+
+    if( start.y === end.y )
+    {
+        axis = [{x:0,y:t},{x:1,y:t}];
+        component = 'x';
+        pos = s;
+
+        if( start.x > end.x )
+        {
+            reverse = true;
+        }
+    }
+    else if( start.y > end.y )
+    {
+        reverse = true;
+    }
+
+    if( reverse )
+    {
+        tmp.start   = start;
+        tmp.startTo = startTo;
+        start       = end;
+        startTo     = endTo;
+        end         = tmp.start;
+        endTo       = tmp.startTo;
+    }
+
+    intersection.far = SAPO.type.Line.withLineIntersection( [end,endTo], axis );
+
+    if( pos > intersection.far[component] )
+    {
+        if( reverse )
+            return this.getPort('color_1').getValue( s, t );
+        else
+            return this.getPort('color_2').getValue( s, t );
+    }
+    else
+    {
+        intersection.near =  SAPO.type.Line.withLineIntersection( [start,startTo], axis );
+
+        if( pos > intersection.near[component])
+        {
+            distance.toEndLine = SAPO.type.Point.toLineDistance( {x:s,y:t}, end, endTo );
+            distance.betweenPoints = SAPO.type.Point.toPointDistance( start, end );
+
+            if( reverse )
+            {
+                tmp.color_1 = this.getPort('color_2').getValue( s, t );
+                tmp.color_2 = this.getPort('color_1').getValue( s, t );
+            }
+            else
+            {
+                tmp.color_1 = this.getPort('color_1').getValue( s, t );
+                tmp.color_2 = this.getPort('color_2').getValue( s, t );
+            }
+
+            return SAPO.type.Color.mix(
+                tmp.color_1,
+                tmp.color_2,
+                SAPO.helper.linearStep( 0, distance.betweenPoints, distance.toEndLine ) );
+        }
+        else
+        {
+            if( reverse )
+                return this.getPort('color_2').getValue( s, t );
+            else
+                return this.getPort('color_1').getValue( s, t );
+        }
+    }
+};
+"""
 
 
 class Multiply(Node):

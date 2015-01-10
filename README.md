@@ -1,6 +1,6 @@
-# Setup
+#Setup
 
-## Virtual environment
+##Virtual environment
 
 Create virtual environment on project folder:
 
@@ -10,7 +10,7 @@ Activate environment (do it on every session, especially before installing new p
 
     $ source env/bin/activate
 
-## Dependencies
+##Dependencies
 
 Install requirements:
 
